@@ -1,3 +1,4 @@
+
 # Sistema de Gestión de Citas Médicas
 
 Este proyecto es un sistema de gestión de citas médicas diseñado para permitir a los pacientes solicitar citas, a los médicos gestionar sus agendas y generar reportes detallados. El sistema incluye funciones para notificaciones, verificación de disponibilidad y cancelación de citas, y está basado en los requerimientos obtenidos del cliente.
@@ -15,7 +16,7 @@ Este proyecto es un sistema de gestión de citas médicas diseñado para permiti
 
 Ejecuta desde la terminal
 
-    ```bash
-    python app/main.py
-    ```
+ ```bash
+    python src/models/main.py
+ ```
 
