@@ -1,0 +1,88 @@
+@startuml
+class Hospital {
+    - datos_de_medicos
+    - datos_de_pacientes
+    - datos_de_citas
+    + cargar_datos()
+    + agregar_medico()
+    + agregar_paciente()
+    + consultar_medico()
+    + consultar_paciente()
+    + guardar_datos()
+    + notificar()
+}
+
+class Paciente {
+    - cedula
+    - nombre
+    - celular
+    - correo
+    +crear_paciente()
+}
+
+class Medico {
+    - cedula
+    - nombre
+    - especialidad
+    - correo
+    - telefono
+    +crear_medico()
+}
+
+class Cita {
+    - fecha_hora
+    - paciente
+    - medico
+    +crear_cita()
+}
+
+class Agenda {
+    -cedula
+    +verificar_disponibilida_citas()
+    + agendar_cita_general()
+    + agendar_cita_especial()
+    + cancelar_cita()
+    + consultar_agenda_medico()
+    + consultar_citas_paciente()
+}
+
+class Notificacion {
+    - cedula
+    - mensaje
+    + enviar_notificacion_a_paciente()
+}
+
+class Celular {
+    + enviar_mensaje()
+}
+
+class Correo {
+    + enviar_correo()
+}
+
+class WhatsApp {
+    + enviar_whatsapp()
+}
+
+class GestionDeDatos {
+    - ruta_datos_medicos
+    - ruta_datos_pacientes
+    - ruta_datos_citas
+    + cargar_datos_medicos()
+    + cargar_datos_pacientes()
+    + cargar_datos_citas()
+    + actualizar_datos()
+}
+' Relaciones
+Hospital o-- Agenda : "tiene"
+Hospital o-- Paciente : "crea"
+Hospital o-- Medico : "crea"
+Agenda *-- Cita : "crea"
+Notificacion o-- Celular : "usa"
+Notificacion o-- Correo : "usa"
+Notificacion o-- WhatsApp : "usa"
+Hospital *-- GestionDeDatos : "usa"
+Hospital o-- Notificacion : "usa"
+
+
+@enduml
