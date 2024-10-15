@@ -1,21 +1,44 @@
+from cita import Cita
+import pandas as pd
+
+
 class Agenda:
-    def __init__(self):
-        self.historico_citas = []
-        self.citas_pendientes = []
-        self.citas_realizadas = []
+    def __init__(self, base_datos_citas):
+        self.datos_csv_citas = base_datos_citas
 
-    def agregar_cita(self, cita):
-        self.citas_pendientes.append(cita)
-        print(
-            f"Cita agregada para el {cita.fecha} con el Dr. {cita.medico.nombre}")
+    def agendar_cita(self, fecha, hora, paciente, medico):
+        agendar = Cita(fecha, hora, paciente, medico)
+        nueva_cita = pd.DataFrame(agendar.crear_cita())
+        self.datos_csv_citas = pd.concat(
+            [self.datos_csv_citas, nueva_cita], ignore_index=True
+        )
+        return self.datos_csv_citas
 
-    def cancelar_y_mover_cita(self, cita):
-        self.citas_pendientes.remove(cita)
-        print(
-            f"La cita del {cita.fecha} ha sido cancelada y movida a otro día.")
+    def reagendar_cita(self, fecha, hora, paciente, medico):
+        self.cancelar_cita(paciente, fecha)
+        self.agendar_cita(fecha, hora, paciente, medico)
+        return self.datos_csv_citas
 
-    def finalizar_cita(self, cita):
-        self.citas_pendientes.remove(cita)
-        self.citas_realizadas.append(cita)
-        print(
-            f"Cita con el Dr. {cita.medico.nombre} el {cita.fecha} ha sido completada")
+    def cancelar_cita(self, paciente, fecha_cita):
+        df = self.datos_de_citas[
+            ~(
+                (self.datos_de_citas["pacientes"] == paciente)
+                & (self.datos_de_citas["fecha"] == fecha_cita)
+            )
+        ]
+        self.datos_csv_citas = df
+        return self.datos_csv_citas
+
+    def consultar_agenda_medico(self, cedula_medico):
+        # filtar csv por numero de cedula del medico
+        return self.datos_de_citas[
+            self.datos_csv_citas["medicos"] == cedula_medico
+        ]
+
+    def consultar_citas_paciente(self, cedula_paciente):
+        return self.datos_csv_citas[
+            self.datos_csv_citas["pacientes"] == cedula_paciente
+        ]
+
+    def notificar_a_paciente(self, cedula):
+        pass
