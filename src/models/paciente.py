@@ -1,5 +1,5 @@
 class Paciente:
-    def __init__(self, nombre, cedula, celular, correo):
+    def __init__(self, cedula, nombre, celular, correo):
         self.cedula = cedula
         self.nombre = nombre
         self.celular = celular

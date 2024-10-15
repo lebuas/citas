@@ -4,9 +4,9 @@ class Medico:
         self.nombre = nombre
         self.correo = correo
         self.especialidad = especialidad
-        self.crear_medioco()
+        self.crear_medico()
 
-    def crear_medioco(self):
+    def crear_medico(self) -> dict:
         return {
             "id": self.cedula,
             "nombre": self.nombre,

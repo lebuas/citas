@@ -1,103 +1,143 @@
 from hospital import Hospital
-from persona_factory import PersonasFactory
+from agenda import Agenda
 
 hospital = Hospital()
 
+
+def opcion1():
+    while True:
+        print("\n--Opciones disponibles en el Hospital--")
+        print("1. Agregar un Médico")
+        print("2. Agregar un Paciente")
+        print("3. Consultar Médico")
+        print("4. Consultar Paciente")
+        print("0. Salir")
+
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            # Validación de la cédula (debe ser un número entero)
+            while True:
+                try:
+                    cedula = int(
+                        input("Ingrese la cédula del médico (solo números): "))
+                    break  # Salir del bucle si la conversión es exitosa
+                except ValueError:
+                    print("Error: La cédula debe ser un número entero.")
+
+            # Verificar si ya existe un médico con esa cédula
+            if hospital.consultar_medico(cedula):
+                print(f"Error: Ya existe un médico con la cédula {cedula}.")
+            else:
+                nombre = input("Ingrese el nombre del médico: ")
+                correo = input("Ingrese el correo del médico: ")
+                especialidad = input("Ingrese la especialidad del médico: ")
+                hospital.agregar_medico(cedula, nombre, correo, especialidad)
+                print(f"Médico {nombre} agregado exitosamente.")
+
+        elif opcion == "2":
+            # Agregar paciente
+            while True:
+                try:
+                    cedula = int(
+                        input("Ingrese la cédula del paciente (solo números): "))
+                    break  # Salir del bucle si la conversión es exitosa
+                except ValueError:
+                    print("Error: La cédula debe ser un número entero.")
+
+            nombre = input("Ingrese el nombre del paciente: ")
+            celular = input("Ingrese el celular del paciente: ")
+            correo = input("Ingrese el correo del paciente: ")
+            hospital.agregar_paciente(cedula, nombre, celular, correo)
+            print(f"Paciente {nombre} agregado exitosamente.")
+
+        elif opcion == "3":
+            # Consultar médico
+            while True:
+                try:
+                    cedula = int(
+                        input("Ingrese la cédula del médico que desea consultar (solo números): "))
+                    break  # Salir del bucle si la conversión es exitosa
+                except ValueError:
+                    print("Error: La cédula debe ser un número entero.")
+
+            medico = hospital.consultar_medico(cedula)
+            if medico:
+                print("\nInformación del médico:")
+                for key, value in medico.items():
+                    print(f"{key.capitalize()}: {value}")
+            else:
+                print(f"No se encontró ningún médico con la cédula {cedula}.")
+
+        elif opcion == "4":
+            # Consultar paciente
+            while True:
+                try:
+                    cedula = int(
+                        input("Ingrese la cédula del paciente que desea consultar (solo números): "))
+                    break  # Salir del bucle si la conversión es exitosa
+                except ValueError:
+                    print("Error: La cédula debe ser un número entero.")
+
+            paciente = hospital.consultar_paciente(cedula)
+            if paciente:
+                print("\nInformación del paciente:")
+                for key, value in paciente.items():
+                    print(f"{key.capitalize()}: {value}")
+            else:
+                print(
+                    f"No se encontró ningún paciente con la cédula {cedula}.")
+
+        elif opcion == "0":
+            # Salir
+            print("Saliendo del menú del hospital...")
+            break
+
+        else:
+            print("Opción inválida, por favor intente nuevamente.")
+
+
+def opcion2():
+    print("\n --Opciones disponible para Mediocos ")
+    print("1. Consulta Agenda")
+    print("0. Salir")
+    opcion = input("Seleccione una opcion: ")
+
+
+def opcion3():
+
+    print("\n --Opciones disponible para Pacientes ")
+    print("1. Agendar una cita")
+    print("2. Reagendar una cita")
+    print("1. Cancelar una cita")
+    print("1. Consutar cita disponibles")
+    print("0. Salir")
+    opcion = input("Ingrese una opcion: ")
+
+
+def opcione4():
+    pass
+
+
 while True:
     print("\n--- Menú ---")
-    print("1. Agregar persona")
-    print("2. Pedir cita")
-    print("3. Cancelar cita")
-    print("4. Asignar médico de preferencia")
-    print("5. Ver citas pendientes")
-    print("6. Salir")
+    print("1.Hospital")
+    print("2.Medico")
+    print("3.Paciente")
+    print("0. Salir")
 
     opcion = input("Seleccione una opción: ")
 
     if opcion == "1":
-        tipo_persona = input(
-            "Ingrese el tipo de persona (médico o paciente): ")
-        identificacion = input("Ingrese la identificación: ")
-        nombre = input("Ingrese el nombre: ")
-        celular = input("Ingrese el celular: ")
-
-        if tipo_persona.lower() == "medico":
-            especialidad = input("Ingrese la especialidad: ")
-            persona = PersonasFactory.crear_persona(
-                "medico", identificacion, nombre, celular, especialidad)
-            hospital.agregar_medico(persona)
-        elif tipo_persona.lower() == "paciente":
-            correo = input("Ingrese el correo: ")
-            persona = PersonasFactory.crear_persona(
-                "paciente", identificacion, nombre, celular, correo=correo)
-            hospital.agregar_paciente(persona)
-        else:
-            print("Tipo de persona inválido.")
-
+        opcion1()
     elif opcion == "2":
-        id_paciente = input("Ingrese la identificación del paciente: ")
-        id_medico = input("Ingrese la identificación del médico: ")
-        fecha = input("Ingrese la fecha de la cita (YYYY-MM-DD): ")
-        motivo = input("Ingrese el motivo de la cita: ")
-
-        paciente = next(
-            (p for p in hospital.usuarios if p.identificacion == id_paciente), None)
-        medico = next(
-            (m for m in hospital.medicos if m.identificacion == id_medico), None)
-
-        if paciente and medico:
-            paciente.pedir_cita(medico, fecha, motivo)
-        else:
-            print("Paciente o médico no encontrado.")
-
+        opcion2()
     elif opcion == "3":
-        id_paciente = int(input("Ingrese la identificación del paciente: "))
-        paciente = next(
-            (p for p in hospital.usuarios if p.identificacion == id_paciente), None)
-
-        if paciente:
-            print("Citas pendientes:")
-            for i, cita in enumerate(paciente.agenda.citas_pendientes):
-                print(f"{i+1}. {cita}")
-
-            opcion_cita = int(input("Seleccione la cita a cancelar: "))
-            if 1 <= opcion_cita <= len(paciente.agenda.citas_pendientes):
-                cita_a_cancelar = paciente.agenda.citas_pendientes[opcion_cita - 1]
-                paciente.cancelar_cita(cita_a_cancelar)
-            else:
-                print("Opción inválida.")
-        else:
-            print("Paciente no encontrado.")
-
+        opcion3()
     elif opcion == "4":
-        id_paciente = int(input("Ingrese la identificación del paciente: "))
-        id_medico = int(input("Ingrese la identificación del médico: "))
-
-        paciente = next(
-            (p for p in hospital.usuarios if p.identificacion == id_paciente), None)
-        medico = next(
-            (m for m in hospital.medicos if m.identificacion == id_medico), None)
-
-        if paciente and medico:
-            paciente.asignar_medico_preferencia(medico)
-        else:
-            print("Paciente o médico no encontrado.")
-
-    elif opcion == "5":
-        id_paciente = int(input("Ingrese la identificación del paciente: "))
-        paciente = next(
-            (p for p in hospital.usuarios if p.identificacion == id_paciente), None)
-
-        if paciente:
-            print("Citas pendientes:")
-            for cita in paciente.agenda.citas_pendientes:
-                print(cita)
-        else:
-            print("Paciente no encontrado.")
-
-    elif opcion == "6":
-        print("Saliendo del programa...")
+        opcione4()
+    elif opcion == "0":
+        print("Saliendo.......")
         break
-
     else:
-        print("Opción inválida.")
+        print("Opciones invalida, intentar nuevamente..")

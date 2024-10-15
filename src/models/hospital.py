@@ -20,13 +20,15 @@ class Hospital:
 
     def agregar_paciente(self, cedula, nombre, celular, correo):
         paciente = Paciente(cedula, nombre, celular, correo)
-
         nuevo_paciente = paciente.crear_paciente()
         nuevo_paciente_df = pd.DataFrame([nuevo_paciente])
 
         # Actualiza el DataFrame de pacientes usando concat
         self.datos_de_pacientes = pd.concat(
             [self.datos_de_pacientes, nuevo_paciente_df], ignore_index=True)
+
+        # Guardar datos
+        self.guardar_datos("pacientes")
 
     def consultar_medico(self, cedula):
         for medico in self.datos_de_medicos:
@@ -43,7 +45,7 @@ class Hospital:
         # Llamar a los métodos de actualización para guardar los datos
         if data == "medicos":
             self.gestionar_datos.actualizar_datos_json(self.datos_de_medicos)
-        elif data == "pacientes":  # Corregido de "pecientes" a "pacientes"
+        elif data == "pacientes":
             self.gestionar_datos.actualizar_datos_csv(
                 'pacientes', self.datos_de_pacientes)
         else:

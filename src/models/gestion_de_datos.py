@@ -5,15 +5,16 @@ import pandas as pd
 
 class GestionDeDatos:
     def __init__(self):
-        # Base directory for data files
-        base_dir = os.path.join(os.getcwd(), "src", "data")
 
-        # Paths to files
+        # Ajustar la ruta para que apunte a la carpeta correcta
+
+        # Cambiar ruta para subir un nivel y acceder a la carpeta "data"
+        base_dir = os.path.join(os.getcwd(), "..", "data")
         self.ruta_datos_json_medicos = os.path.join(base_dir, "medicos.json")
-        self.ruta_datos_pacientes = os.path.join(base_dir, 'pacientes.csv')
-        self.ruta_datos_citas = os.path.join(base_dir, 'citas.csv')
+        self.ruta_datos_pacientes = os.path.join(base_dir, "pacientes.csv")
+        self.ruta_datos_citas = os.path.join(base_dir, "citas.csv")
 
-        # Load data when the class is initialized
+        # Cargar datos al inicializar la clase
         self.datos_medicos = self.cargar_datos_json_medicos()
         self.datos_pacientes = pd.read_csv(self.ruta_datos_pacientes)
         self.datos_citas = pd.read_csv(self.ruta_datos_citas)
