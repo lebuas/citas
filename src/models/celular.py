@@ -1,6 +1,7 @@
 class Celular:
-    def verificar_celular(self, numero_celular):
-        print(f"Enviando mensaje de verificación a {numero_celular}")
+    def __init__(self, celular, mensaje):
+        self.celular = celular
+        self.mensaje = mensaje
 
     def enviar_mensaje(self, numero_celular, mensaje):
         print(
