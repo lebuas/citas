@@ -30,14 +30,17 @@ class Agenda:
         return self.datos_csv_citas
 
     def consultar_agenda_medico(self, cedula_medico):
-        # filtar csv por numero de cedula del medico
-        return self.datos_de_citas[
-            self.datos_csv_citas["medicos"] == cedula_medico
+        # Convertir la cédula del médico a string
+        cedula_medico = str(cedula_medico)
+
+        # Filtrar el DataFrame por la cédula del médico
+        return self.datos_csv_citas[
+            self.datos_csv_citas["medico"].astype(str) == cedula_medico
         ]
 
     def consultar_citas_paciente(self, cedula_paciente):
         return self.datos_csv_citas[
-            self.datos_csv_citas["pacientes"] == cedula_paciente
+            self.datos_csv_citas["paciente"] == cedula_paciente
         ]
 
     def notificar_a_paciente(self, cedula):

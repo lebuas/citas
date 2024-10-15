@@ -1,6 +1,5 @@
 from hospital import Hospital
 from agenda import Agenda
-
 hospital = Hospital()
 
 
@@ -16,14 +15,14 @@ def opcion1():
         opcion = input("Seleccione una opción: ")
 
         if opcion == "1":
-            # Validación de la cédula (debe ser un número entero)
+            # Ingreso de cédula como string
             while True:
-                try:
-                    cedula = int(
-                        input("Ingrese la cédula del médico (solo números): "))
-                    break  # Salir del bucle si la conversión es exitosa
-                except ValueError:
-                    print("Error: La cédula debe ser un número entero.")
+                cedula = input("Ingrese la cédula del médico: ")
+                if cedula.isdigit():
+                    # Salir del bucle si es un número válido (cadena numérica)
+                    break
+                else:
+                    print("Error: La cédula debe contener solo números.")
 
             # Verificar si ya existe un médico con esa cédula
             if hospital.consultar_medico(cedula):
@@ -38,12 +37,12 @@ def opcion1():
         elif opcion == "2":
             # Agregar paciente
             while True:
-                try:
-                    cedula = int(
-                        input("Ingrese la cédula del paciente (solo números): "))
-                    break  # Salir del bucle si la conversión es exitosa
-                except ValueError:
-                    print("Error: La cédula debe ser un número entero.")
+                cedula = input("Ingrese la cédula del paciente: ")
+                if cedula.isdigit():
+                    # Salir del bucle si es un número válido (cadena numérica)
+                    break
+                else:
+                    print("Error: La cédula debe contener solo números.")
 
             nombre = input("Ingrese el nombre del paciente: ")
             celular = input("Ingrese el celular del paciente: ")
@@ -54,12 +53,13 @@ def opcion1():
         elif opcion == "3":
             # Consultar médico
             while True:
-                try:
-                    cedula = int(
-                        input("Ingrese la cédula del médico que desea consultar (solo números): "))
-                    break  # Salir del bucle si la conversión es exitosa
-                except ValueError:
-                    print("Error: La cédula debe ser un número entero.")
+                cedula = input(
+                    "Ingrese la cédula del médico que desea consultar: ")
+                if cedula.isdigit():
+                    # Salir del bucle si es un número válido (cadena numérica)
+                    break
+                else:
+                    print("Error: La cédula debe contener solo números.")
 
             medico = hospital.consultar_medico(cedula)
             if medico:
@@ -72,12 +72,13 @@ def opcion1():
         elif opcion == "4":
             # Consultar paciente
             while True:
-                try:
-                    cedula = int(
-                        input("Ingrese la cédula del paciente que desea consultar (solo números): "))
-                    break  # Salir del bucle si la conversión es exitosa
-                except ValueError:
-                    print("Error: La cédula debe ser un número entero.")
+                cedula = input(
+                    "Ingrese la cédula del paciente que desea consultar: ")
+                if cedula.isdigit():
+                    # Salir del bucle si es un número válido (cadena numérica)
+                    break
+                else:
+                    print("Error: La cédula debe contener solo números.")
 
             paciente = hospital.consultar_paciente(cedula)
             if paciente:
@@ -98,10 +99,42 @@ def opcion1():
 
 
 def opcion2():
-    print("\n --Opciones disponible para Mediocos ")
-    print("1. Consulta Agenda")
-    print("0. Salir")
-    opcion = input("Seleccione una opcion: ")
+    while True:
+        print("\n --Opciones disponibles para Médicos --")
+        print("1. Consulta Agenda")
+        print("0. Salir")
+
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            # Consulta Agenda
+            cedula = input("Ingrese la cédula del médico: ")
+
+            # Consultar médico primero para validar que existe
+            medico = hospital.consultar_medico(cedula)
+            if medico:
+                # Si el médico existe, consultar la agenda
+                agenda = Agenda(hospital.datos_de_citas)
+                citas = agenda.consultar_agenda_medico(cedula)
+
+                if not citas.empty:
+                    print(f"\nAgenda del médico con cédula {cedula}:")
+                    for index, cita in citas.iterrows():
+                        print(
+                            f"Fecha: {cita['fecha']}, Hora: {cita['hora']}, Paciente: {cita['paciente']}")
+                else:
+                    print(
+                        f"No hay citas agendadas para el médico con cédula {cedula}.")
+            else:
+                print(f"No se encontró ningún médico con la cédula {cedula}.")
+
+        elif opcion == "0":
+            # Salir
+            print("Saliendo del menú de la agenda...")
+            break
+
+        else:
+            print("Opción inválida, por favor intente nuevamente.")
 
 
 def opcion3():
