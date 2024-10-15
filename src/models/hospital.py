@@ -15,15 +15,13 @@ class Hospital:
     def agregar_medico(self, nombre, cedula, celular, especialidad):
         medico = Medico(nombre, cedula, celular, especialidad)
         nuevo_medico = medico.crear_medico()
-        self.datos_de_medicos.update(nuevo_medico)
+        self.datos_de_medicos.append(nuevo_medico)
+        self.guardar_datos("medicos")
 
     def agregar_paciente(self, cedula, nombre, celular, correo):
         paciente = Paciente(cedula, nombre, celular, correo)
-        # Supongamos que esto devuelve un dict
-        nuevo_paciente = paciente.crear_paciente()
 
-        # Convertir nuevo_paciente (dict) a DataFrame
-        # Usa una lista para crear un DataFrame
+        nuevo_paciente = paciente.crear_paciente()
         nuevo_paciente_df = pd.DataFrame([nuevo_paciente])
 
         # Actualiza el DataFrame de pacientes usando concat
@@ -31,8 +29,8 @@ class Hospital:
             [self.datos_de_pacientes, nuevo_paciente_df], ignore_index=True)
 
     def consultar_medico(self, cedula):
-        for medico in self.datos_de_medicos.values():
-            if medico['cedula'] == cedula:
+        for medico in self.datos_de_medicos:
+            if medico['id'] == cedula:
                 return medico
         return None
 
