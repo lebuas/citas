@@ -1,13 +1,15 @@
-from persona import Persona
-from agenda import Agenda
-
-
-class Medico(Persona):
-    def __init__(self, identificacion, nombre, celular, especialidad):
-        super().__init__(identificacion, nombre, celular)
+class Medico:
+    def __init__(self, cedula, nombre, correo, especialidad):
+        self.cedula = cedula
+        self.nombre = nombre
+        self.correo = correo
         self.especialidad = especialidad
-        self.agenda = Agenda()
+        self.crear_medioco()
 
-    def verificar_disponibilidad(self, fecha):
-        # Verifica si tiene citas pendientes en la fecha dada
-        return fecha not in self.agenda.citas_pendientes
+    def crear_medioco(self):
+        return {
+            "id": self.cedula,
+            "nombre": self.nombre,
+            "correo": self.correo,
+            "especialidad": self.especialidad
+        }
