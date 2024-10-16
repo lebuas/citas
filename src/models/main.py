@@ -170,13 +170,21 @@ def opcion3():
                         break
                     print("Medico no encontrado, verifica la cedula")
 
-                fecha = obtener_fecha()
-                hora = obtener_hora()
-                fecha_hora_diaponibles = agenda.horario_disponible(
-                    medico, fecha, hora)
+                while True:
+                    fecha = obtener_fecha()
+                    hora = obtener_hora()
 
-                if fecha_hora_diaponibles:
-                    agenda.agendar_cita(fecha, hora, paciente, medico)
+                    fecha_hora_diaponibles = agenda.horario_disponible(
+                        medico, fecha, hora)
+
+                    if fecha_hora_diaponibles:
+                        agenda.agendar_cita(fecha, hora, paciente, medico)
+                        break
+                    else:
+                        print(
+                            "Fecha y hora no disponibles, selecciones otro horario para su cita")
+                        continue
+                print("Su cita ha sido agenda")
 
             else:
                 print(
