@@ -4,8 +4,6 @@ from datetime import datetime
 from rich import print
 from rich.panel import Panel
 from rich.table import Table
-from rich.prompt import Prompt
-from datetime import datetime, timedelta
 from hospital import Hospital
 from agenda import Agenda
 from notificacion import Notificaciones
