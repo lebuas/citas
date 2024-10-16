@@ -1,5 +1,5 @@
 class Correo:
-    def Correo(self, correo, asunto, mensaje):
+    def __init__(self, correo, asunto, mensaje):
         self.correo = correo
         self.asunto = asunto
         self.mensaje = mensaje

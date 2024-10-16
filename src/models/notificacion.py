@@ -21,7 +21,7 @@ class Notificaciones:
         }.get(asunto, 3)  # Por defecto, cancelar
 
         mensaje = self.mensajes[indice]
-        self.notificar_a_correo = Correo(self.correo, mensaje)
+        self.notificar_a_correo = Correo(self.correo, asunto, mensaje)
         self.notificar_a_whatsapp = WhatsApp(self.celular, mensaje)
         self.notificar_a_celular = Celular(self.celular, mensaje)
 

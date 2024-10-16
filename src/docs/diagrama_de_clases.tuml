@@ -43,22 +43,23 @@ class Agenda {
     + cancelar_cita()
     + consultar_agenda_medico()
     + consultar_citas_paciente()
-    + notificar_a_paciente()
+    + horarios_dispobibles()
 }
 
 class Notificacion {
-    - cedula_paciente
-    + notificar_agendamiento_de_cita()
-    + notificar_cancelacion_de_cita()
-    + notificar_reagendamiento_de_cita()
-    + Enviar_recordatorio_de_cita()
+    - celular
+    - correo
+    - mensajes
+      notificar_a_correo
+      notificar_a_whatsapp
+      notificar_a_celuar
+    + enviar_notificacion()
 }
 
 class Celular {
     - celular
     - mensaje
     + enviar_mensaje()
-    + realizar_llamada()
 }
 
 class Correo {
@@ -69,7 +70,7 @@ class Correo {
 }
 
 class WhatsApp {
-    -numero_con_whatsapp
+    -celular
     -mensaje
     + enviar_whatsapp()
 }
