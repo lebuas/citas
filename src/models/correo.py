@@ -4,5 +4,6 @@ class Correo:
         self.asunto = asunto
         self.mensaje = mensaje
 
-    def enviar_correo(self, para, asunto):
-        print(f"Enviando correo a {para} con asunto: {asunto}")
+    def enviar_correo(self):
+        print(
+            f"Enviando correo a {self.correo} con asunto: {self.asunto} y mensaje {self.mensaje}")

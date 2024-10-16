@@ -4,25 +4,28 @@ from celular import Celular
 
 
 class Notificaciones:
-
-    def __init__(self, nombre, celular, correo, fecha_hora_cita):
-        self.nombre = nombre
-        self.celuar = celular
+    def __init__(self, nombre, celular, correo, fecha, hora, asunto):
+        self.celular = celular
         self.correo = correo
-        self.fecha_hora = fecha_hora_cita
 
-        self.notificar_a_correo = Correo()
-        self.notificar_a_whatsapp = WhatsApp()
-        self.notificar_a_celuar = Celular()
+        self.mensajes = {
+            1: f"Señor(a) {nombre}, se le ha agendado una cita con fecha {fecha} y hora {hora}",
+            2: f"Señor(a) {nombre}, su cita se ha movido a la fecha {fecha} y hora {hora}",
+            3: f"Señor(a) {nombre}, su cita del día {fecha} y hora {hora} ha sido eliminada"
+        }
 
-    def notificar_agendamieto_de_cita(self, datos_pacientes, fecha, hora):
-        mensaje = f"Señor: {nombre} se le ha agendado una cita para{fechca}{hora}"
+        indice = {
+            "agendar": 1,
+            "reagendar": 2,
+            "cancelar": 3
+        }.get(asunto, 3)  # Por defecto, cancelar
 
-    def notificar_cancelacion_de_cita(self):
-        pass
+        mensaje = self.mensajes[indice]
+        self.notificar_a_correo = Correo(self.correo, mensaje)
+        self.notificar_a_whatsapp = WhatsApp(self.celular, mensaje)
+        self.notificar_a_celular = Celular(self.celular, mensaje)
 
-    def notificar_reagendamiento_de_cita():
-        pass
-
-    def enviar_recordatorio_de_cita():
-        pass
+    def enviar_notificaciones(self):
+        self.notificar_a_correo.enviar_correo()
+        self.notificar_a_celular.enviar_mensaje()
+        self.notificar_a_whatsapp.enviar_whatsapp()

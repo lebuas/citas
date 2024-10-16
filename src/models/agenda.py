@@ -1,6 +1,7 @@
 from datetime import datetime
 from cita import Cita
 import pandas as pd
+from notificacion import Notificaciones
 
 
 class Agenda:
@@ -50,9 +51,6 @@ class Agenda:
             )
 
             if abs((cita_existente_datetime - cita_datetime).total_seconds()) < 1200:
-                return False  # Hay un conflicto
+                return False
 
         return True  # El horario está disponible
-
-    def notificar_a_paciente(self, cedula):
-        pass
