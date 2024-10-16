@@ -38,7 +38,8 @@ class Hospital:
 
     def consultar_paciente(self, cedula):
         # Usar DataFrame para la consulta
-        paciente = self.datos_de_pacientes[self.datos_de_pacientes['cedula'] == cedula]
+        paciente = self.datos_de_pacientes[self.datos_de_pacientes['cedula'] == int(
+            cedula)]
         return paciente.to_dict(orient='records')[0] if not paciente.empty else None
 
     def guardar_datos(self, data):

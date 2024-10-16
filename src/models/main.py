@@ -1,3 +1,5 @@
+# Asegúrate de que esta clase maneje la carga de datos de médicos y pacientes
+from datetime import datetime, timedelta
 from hospital import Hospital
 from agenda import Agenda
 hospital = Hospital()
@@ -110,6 +112,11 @@ def opcion2():
             # Consulta Agenda
             cedula = input("Ingrese la cédula del médico: ")
 
+            # Validar que la cédula es numérica y tiene la longitud correcta
+            if not cedula.isdigit() or len(cedula) > 10 or len(cedula) < 6:
+                print("Ingrese una cédula valida entre de 6 a 10 digitos.")
+                continue
+
             # Consultar médico primero para validar que existe
             medico = hospital.consultar_medico(cedula)
             if medico:
@@ -138,18 +145,66 @@ def opcion2():
 
 
 def opcion3():
+    agenda = Agenda(hospital.datos_de_citas)
+    while True:
+        print("\n --Opciones disponibles para Pacientes --")
+        print("1. Agendar una cita")
+        print("2. Reagendar una cita")
+        print("3. Cancelar una cita")
+        print("4. Consultar citas disponibles")
+        print("0. Salir")
+        opcion = input("Seleccione una opcion: ")
 
-    print("\n --Opciones disponible para Pacientes ")
-    print("1. Agendar una cita")
-    print("2. Reagendar una cita")
-    print("1. Cancelar una cita")
-    print("1. Consutar cita disponibles")
-    print("0. Salir")
-    opcion = input("Ingrese una opcion: ")
+        if opcion == "1":
+            paciente = input("Ingrese la cedula del paciente: ")
+            if hospital.consultar_paciente(paciente):
+                print("\n")
+                for datos in hospital.datos_de_medicos:
+                    print(
+                        f"Cedula: {datos['id']} Nombre: {datos['nombre']} Especialidad: {datos['especialidad']}")
+
+                while True:
+                    print("\nSeleccione medico de la lista....")
+                    medico = input("Ingrese la cedula del medico: ")
+                    if hospital.consultar_medico(medico):
+                        break
+                    print("Medico no encontrado, verifica la cedula")
+
+                fecha = obtener_fecha()
+                hora = obtener_hora()
+                fecha_hora_diaponibles = agenda.horario_disponible(
+                    medico, fecha, hora)
+
+                if fecha_hora_diaponibles:
+                    agenda.agendar_cita(fecha, hora, paciente, medico)
+
+            else:
+                print(
+                    f"Paciente {paciente} no se encuentra afiliado, o verifique cedula ingresada")
+        elif opcion == "0":
+            break
 
 
-def opcione4():
-    pass
+def obtener_fecha():
+    while True:
+        fecha = input("Ingresar la fecha (YYYY-MM-DD) [Ejemplo: 2024-10-15]: ")
+        try:
+            # Validar y convertir la fecha
+            fecha = datetime.strptime(fecha, "%Y-%m-%d")
+            return fecha  # Devolver la fecha si es válida
+        except ValueError:
+            print("Formato de fecha no válido. Por favor, intente de nuevo.")
+
+
+def obtener_hora():
+    while True:
+        hora = input("Ingresar la hora (HH:MM:SS) [Ejemplo: 14:30:00]: ")
+        try:
+            # Validar y convertir la hora
+            hora = datetime.strptime(hora, "%H:%M:%S").time()
+            return hora  # Devolver la hora si es válida
+        except ValueError:
+            print("Formato de hora no válido. Por favor, intente de nuevo.")
 
 
 while True:
@@ -167,8 +222,6 @@ while True:
         opcion2()
     elif opcion == "3":
         opcion3()
-    elif opcion == "4":
-        opcione4()
     elif opcion == "0":
         print("Saliendo.......")
         break

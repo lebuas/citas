@@ -1,5 +1,7 @@
+from datetime import datetime
 from cita import Cita
 import pandas as pd
+from datetime import datetime, timedelta
 
 
 class Agenda:
@@ -8,11 +10,13 @@ class Agenda:
 
     def agendar_cita(self, fecha, hora, paciente, medico):
         agendar = Cita(fecha, hora, paciente, medico)
-        nueva_cita = pd.DataFrame(agendar.crear_cita())
+        nueva_cita = pd.DataFrame(
+            agendar.crear_cita(fecha, hora, paciente, medico))
         self.datos_csv_citas = pd.concat(
             [self.datos_csv_citas, nueva_cita], ignore_index=True
         )
-        return self.datos_csv_citas
+        # Guardar el DataFrame actualizado en un archivo CSV
+        self.datos_csv_citas.to_csv('../data/citas.csv', index=False)
 
     def reagendar_cita(self, fecha, hora, paciente, medico):
         self.cancelar_cita(paciente, fecha)
@@ -30,9 +34,6 @@ class Agenda:
         return self.datos_csv_citas
 
     def consultar_agenda_medico(self, cedula_medico):
-        # Convertir la cédula del médico a string
-        cedula_medico = str(cedula_medico)
-
         # Filtrar el DataFrame por la cédula del médico
         return self.datos_csv_citas[
             self.datos_csv_citas["medico"].astype(str) == cedula_medico
@@ -43,5 +44,27 @@ class Agenda:
             self.datos_csv_citas["paciente"] == cedula_paciente
         ]
 
-    def notificar_a_paciente(self, cedula):
-        pass
+    def horario_disponible(self, medico, fecha, hora):
+        # Obtener la agenda del médico
+        agenda = self.consultar_agenda_medico(medico)
+
+        # Convertir la fecha y hora ingresadas en un objeto datetime
+        cita_datetime = datetime.combine(fecha, hora)
+
+        # Comprobar si la agenda está vacía
+        if agenda.empty:
+            return True  # No hay citas, horario disponible
+
+        # Iterar sobre las citas existentes en la agenda
+        for index, cita in agenda.iterrows():
+            cita_existente_datetime = datetime.strptime(
+                f"{cita['fecha']} {cita['hora']}", "%Y-%m-%d %H:%M:%S")
+
+            # Comprobar si la nueva cita tiene al menos 20 minutos de diferencia
+            if abs((cita_existente_datetime - cita_datetime).total_seconds()) < 1200:
+                return False  # Hay un conflicto
+
+        return True  # El horario está disponible
+
+        def notificar_a_paciente(self, cedula):
+            pass
