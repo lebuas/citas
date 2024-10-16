@@ -153,42 +153,135 @@ def opcion3():
         print("3. Cancelar una cita")
         print("4. Consultar citas disponibles")
         print("0. Salir")
-        opcion = input("Seleccione una opcion: ")
+        opcion = input("Seleccione una opción: ")
 
+        # Opción 1: Agendar una cita
         if opcion == "1":
-            paciente = input("Ingrese la cedula del paciente: ")
+            paciente = input("Ingrese la cédula del paciente: ")
             if hospital.consultar_paciente(paciente):
                 print("\n")
                 for datos in hospital.datos_de_medicos:
                     print(
-                        f"Cedula: {datos['id']} Nombre: {datos['nombre']} Especialidad: {datos['especialidad']}")
+                        f"Cédula: {datos['id']} Nombre: {datos['nombre']} Especialidad: {datos['especialidad']}"
+                    )
 
+                # Seleccionar médico
                 while True:
-                    print("\nSeleccione medico de la lista....")
-                    medico = input("Ingrese la cedula del medico: ")
+                    print("\nSeleccione médico de la lista....")
+                    medico = input("Ingrese la cédula del médico: ")
                     if hospital.consultar_medico(medico):
                         break
-                    print("Medico no encontrado, verifica la cedula")
+                    print("Médico no encontrado, verifica la cédula.")
 
+                # Seleccionar fecha y hora
                 while True:
                     fecha = obtener_fecha()
                     hora = obtener_hora()
 
-                    fecha_hora_diaponibles = agenda.horario_disponible(
-                        medico, fecha, hora)
-
-                    if fecha_hora_diaponibles:
+                    if agenda.horario_disponible(medico, fecha, hora):
                         agenda.agendar_cita(fecha, hora, paciente, medico)
+                        print("Su cita ha sido agendada.")
                         break
                     else:
-                        print(
-                            "Fecha y hora no disponibles, selecciones otro horario para su cita")
+                        print("Fecha y hora no disponibles, seleccione otro horario.")
                         continue
-                print("Su cita ha sido agenda")
 
             else:
                 print(
-                    f"Paciente {paciente} no se encuentra afiliado, o verifique cedula ingresada")
+                    f"Paciente {paciente} no se encuentra afiliado, o verifique cédula ingresada."
+                )
+
+        # Opción 2: Reagendar una cita
+        elif opcion == "2":
+            paciente = input("Ingrese la cédula del paciente: ")
+            if hospital.consultar_paciente(paciente):
+                citas_paciente = agenda.consultar_citas_paciente(paciente)
+                if citas_paciente.empty:
+                    print(f"El paciente {paciente} no tiene citas agendadas.")
+                    continue
+
+                # Mostrar citas actuales del paciente con sus índices
+                print("Citas actuales del paciente (índice - fecha - hora - médico):")
+                print(citas_paciente.reset_index()[
+                    ['index', 'fecha', 'hora', 'medico']
+                ])
+
+                # Solicitar el índice de la cita a reagendar
+                indice_cita = input(
+                    "Ingrese el índice de la cita a reagendar: ")
+
+                # Verificar si el índice es válido
+                if int(indice_cita) in citas_paciente.index:
+                    cita_actual = citas_paciente.loc[int(indice_cita)]
+                    medico_actual = cita_actual["medico"]
+
+                    # Solicitar nueva fecha y hora
+                    while True:
+                        print("\nIngrese la nueva fecha")
+                        nueva_fecha = obtener_fecha()
+                        print("\nIngrese la nueva hora")
+                        nueva_hora = obtener_hora()
+
+                        # Verificar disponibilidad
+                        if agenda.horario_disponible(medico_actual, nueva_fecha, nueva_hora):
+                            agenda.cancelar_cita(indice_cita)
+                            agenda.agendar_cita(
+                                nueva_fecha, nueva_hora, paciente, medico_actual)
+                            print("Cita reagendada exitosamente.")
+                            break
+                        else:
+                            print(
+                                "El horario no está disponible, elija otro horario.")
+                else:
+                    print("Índice no encontrado, verifica el valor ingresado.")
+            else:
+                print(
+                    f"Paciente {paciente} no se encuentra afiliado, o verifique cédula ingresada.")
+
+        # Opción 3: Cancelar una cita
+        elif opcion == "3":
+            paciente = input("Ingrese la cédula del paciente: ")
+            if hospital.consultar_paciente(paciente):
+                citas_paciente = agenda.consultar_citas_paciente(paciente)
+                if citas_paciente.empty:
+                    print(f"El paciente {paciente} no tiene citas agendadas.")
+                    continue
+
+                # Mostrar citas actuales del paciente con sus índices
+                print("Citas actuales del paciente (índice - fecha - hora - médico):")
+                print(citas_paciente.reset_index()[
+                    ['index', 'fecha', 'hora', 'medico']
+                ])
+
+                # Solicitar el índice de la cita a cancelar
+                indice_cita = input(
+                    "Ingrese el índice de la cita a cancelar: ")
+
+                # Verificar si el índice es válido
+                if int(indice_cita) in citas_paciente.index:
+                    agenda.cancelar_cita(indice_cita)
+                    print(
+                        f"La cita con índice {indice_cita} ha sido cancelada.")
+                else:
+                    print("Índice no encontrado, verifica el valor ingresado.")
+            else:
+                print(
+                    f"Paciente {paciente} no se encuentra afiliado, o verifique cédula ingresada.")
+
+        elif opcion == "4":  # Consultar citas disponibles
+            paciente = input("Ingrese la cedula del paciente: ")
+            if hospital.consultar_paciente(paciente):
+                citas_paciente = agenda.consultar_citas_paciente(paciente)
+                if citas_paciente.empty:
+                    print(f"El paciente {paciente} no tiene citas agendadas.")
+                else:
+                    print("Citas actuales del paciente:")
+                    print(citas_paciente[['fecha', 'hora', 'medico']])
+            else:
+                print(
+                    f"Paciente {paciente} no se encuentra afiliado, o verifique cedula ingresada.")
+
+        # Opción 0: Salir
         elif opcion == "0":
             break
 
